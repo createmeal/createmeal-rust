@@ -14,7 +14,7 @@ impl NodeFactory {
         }
     }
     pub fn create_nodes_from_object(&self,jsd: serde_json::Value) -> Vec<node::Node>{
-        let nodes = vec![];
+        let mut nodes = vec![];
         if jsd.is_null() {
             return nodes;
         }
@@ -27,13 +27,14 @@ impl NodeFactory {
                     continue;
                 }
                 let attributes = self.attribute_factory.get_attributes(serde_json::json!(value));
-                let children = self.create_nodes(serde_json::json!(value));
+                let children = self.create_nodes(data::read_json(value));
                 let node = node::Node::new(key.to_string(), attributes, children);
-                println!("key: {}",key);
-                println!("value: {}",value);
-                println!("html: {}",node.to_html());
+                nodes.push(node);
             }
-            return nodes;
+            for node in nodes {
+                println!("{}",&node.to_html());
+            }
+            return vec![];
         }
     }
     pub fn create_nodes(&self,jsd: serde_json::Value) -> Vec<node::Node>{

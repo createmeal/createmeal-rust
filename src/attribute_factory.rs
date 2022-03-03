@@ -9,8 +9,8 @@ pub struct AttributeFactory {
 impl AttributeFactory {
     pub fn new() -> Self {
         Self {
-            attributes: data::read_json("./src/attributes.json".to_string()),
-            tags: data::read_json("./src/tags.json".to_string())
+            attributes: data::read_json_file("./attributes.json".to_string()),
+            tags: data::read_json_file("./tags.json".to_string())
         }
     }
     pub fn is_field_representing_attributes(&self,key: &str) -> bool{

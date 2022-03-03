@@ -65,7 +65,7 @@ impl Node {
         return format!("{}{}{}",self.get_open_tag(),self.get_children(),self.get_close_tag());
     }
     pub fn is_self_closing_tag(&self) -> bool{
-        let result = data::read_json("./src/self_closing_tags.json".to_string());
+        let result = data::read_json_file("./src/self_closing_tags.json".to_string());
         return result[&self.name] == true;
     }
 }

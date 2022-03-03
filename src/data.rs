@@ -3,7 +3,11 @@ use serde::de::*;
 use crate::serde_json;
 use std::fs;
 
-pub fn read_json(path: String) -> serde_json::Value {
+pub fn read_json(data: String) -> serde_json::Value{
+    let res: serde_json::Value = serde_json::from_str(&data).expect("Unable to parse");
+    return res;
+}
+pub fn read_json_file(path: String) -> serde_json::Value {
     let data = fs::read_to_string(path).expect("Unable to read file");
     let res: serde_json::Value = serde_json::from_str(&data).expect("Unable to parse");
     return res;

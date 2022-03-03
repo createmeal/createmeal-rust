@@ -12,17 +12,12 @@ impl Document {
         }
     }
     pub fn to_html(&self,jsd: serde_json::Value) -> String {
-        if jsd.is_array() {
-            return jsd.to_string();
-        }
-        else if jsd.is_object() {
-            self.node_factory.create_nodes_from_object(jsd);
+        if jsd.is_string() {
+            self.node_factory.create_nodes(self.try_parse_object(jsd));
             return "".to_string();
         }
-        else if jsd.is_string() {
-            return self.try_parse_object(jsd).to_string();
-        }
         else{
+            self.node_factory.create_nodes(jsd);
             return "".to_string();
         }
     }

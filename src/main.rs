@@ -18,6 +18,7 @@ fn main() {
             }
         }
     }));
+    
     let head = node::Node::new("head".to_string(),vec![],vec![]);
     let img = node::Node::new("img".to_string(),vec!["src=\"\"".to_string()],vec![]);
     let body = node::Node::new("body".to_string(),vec![],vec![img]);
