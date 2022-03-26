@@ -13,12 +13,38 @@ impl NodeFactory {
             attribute_factory: attribute_factory::AttributeFactory::new()
         }
     }
-    pub fn create_nodes_from_object(&self,jsd: serde_json::Value) -> Vec<node::Node>{
+    /// check if is an object or array to call right method to create nodes.
+    pub fn create_nodes(&self,jsd: serde_json::Value) -> Vec<node::Node> {
+        if jsd.is_object() {
+            return self.get_nodes(jsd);
+        }
+        if jsd.is_array() {
+            return self.create_nodes_from_array(jsd);
+        }
+        return vec![];
+    }
+    pub fn create_nodes_from_array(&self,_jsd: serde_json::Value)-> Vec<node::Node>{
+        let nodes: Vec<node::Node>= vec![];
+        return nodes;
+    }
+    pub fn get_nodes(&self, value: serde_json::Value) -> Vec<node::Node>{
+        if value.is_string() {
+            return vec![self.get_node_from_string(value.to_string())];
+        }
+        if value.is_array() {
+            return self.get_nodes_from_array(value);
+        }
+        if value.is_object() {
+            return self.get_nodes_from_object(value);
+        }
+        return vec![node::Node::new("".to_string(), vec![], vec![])];
+    }
+    pub fn get_nodes_from_object(&self,jsd: serde_json::Value) -> Vec<node::Node>{
         let mut nodes = vec![];
         if jsd.is_null() {
             return nodes;
         }
-        else{        
+        else{
             let value = jsd.to_string();
             let mut deser = serde_json::Deserializer::from_str(&value);
             let m = data::deser_hashmap(&mut deser).unwrap();
@@ -37,25 +63,10 @@ impl NodeFactory {
             return vec![];
         }
     }
-    pub fn create_nodes(&self,jsd: serde_json::Value) -> Vec<node::Node>{
-        if jsd.is_object() {
-            return self.create_nodes_from_object(jsd);
-        }
-        if jsd.is_array() {
-            return self.create_nodes_from_array(jsd);
-        }
-        return vec![];
+    pub fn get_nodes_from_array(&self,_value: serde_json::Value) -> Vec<node::Node>{
+        return vec![node::Node::new("".to_string(), vec![], vec![])];
     }
-    pub fn create_nodes_from_array(&self,_jsd: serde_json::Value)-> Vec<node::Node>{
-        return vec![];
+    pub fn get_node_from_string(&self,value: String) -> node::Node{
+        return node::Node::new(value.to_string(), vec![], vec![]);
     }
-    /*pub fn get_object_node(&self,_value: serde_json::Value){
-
-    }
-    pub fn get_array_node(&self,_value: Vec<serde_json::Value>) -> node::Node{
-        return node::Node::new("".to_string(), vec![], vec![]);
-    }
-    pub fn get_string_node(&self,_value: String) -> node::Node{
-        return node::Node::new("".to_string(), vec![], vec![]);
-    }*/
 }

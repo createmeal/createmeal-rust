@@ -12,14 +12,24 @@ impl Document {
         }
     }
     pub fn to_html(&self,jsd: serde_json::Value) -> String {
+        let mut nodes = vec![];
+
         if jsd.is_string() {
-            self.node_factory.create_nodes(self.try_parse_object(jsd));
-            return "".to_string();
+            nodes = self.node_factory.create_nodes(self.try_parse_object(jsd));
         }
         else{
-            self.node_factory.create_nodes(jsd);
+            nodes = self.node_factory.create_nodes(jsd);
+        }
+
+        if nodes.len() == 0 {
             return "".to_string();
         }
+        let mut htmls = vec![];
+        for node in nodes {
+            htmls.push(node.to_html());
+        }
+        
+        return htmls.join("");
     }
     fn try_parse_object(&self,jsd: serde_json::Value) -> serde_json::Value{
         return serde_json::json!(&jsd.to_string());
