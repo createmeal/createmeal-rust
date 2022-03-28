@@ -46,3 +46,10 @@ where
     let visitor = MapVisitor;
     deserializer.deserialize_map(visitor)
 }
+
+pub fn remove_first_charactere(value: &String) -> String{
+    return value[1..value.len()].to_string();
+}
+pub fn remove_last_charactere(value: &String) -> String{
+    return value[0..value.len()-1].to_string();
+}

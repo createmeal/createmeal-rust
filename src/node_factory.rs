@@ -57,7 +57,7 @@ impl NodeFactory {
                 if self.attribute_factory.is_field_representing_attributes(&key) {
                     continue;
                 }
-                let attributes = self.attribute_factory.get_attributes(serde_json::json!(value));
+                let attributes = self.attribute_factory.get_attributes(&data::read_json(value.to_string()));
                 let children = self.create_nodes(&data::read_json(value));
                 
                 let node = node::Node::new(key.to_string(), attributes, children);
